@@ -1,8 +1,10 @@
 from selenium import webdriver
 from selenium.webdriver import ActionsChains
 from selenium.webdriver.common.by import By
-from webdriver_manager.chrome import ChromeDriverManager
+#from webdriver_manager.chrome import ChromeDriverManager
 import time
+
+driver = webdriver.Chrome(executable_path="C:\webdrivers\chromedriver.exe")
 
 
 def test_google():
