@@ -1,6 +1,7 @@
 import pytest
 
 
+@pytest.mark.logg
 def test_m1():
     a = 3
     b = 4
@@ -13,6 +14,7 @@ def test_m2():
     assert name.upper() == "SELENIUM"
 
 
+@pytest.mark.logg
 def test_m3():
     assert True
 
@@ -21,6 +23,7 @@ def test_m4():
     assert False
 
 
+@pytest.mark.logg
 def test_m5():
     assert 100 == 100
 
@@ -29,5 +32,6 @@ def test_m6():
     assert "vladis" == "VLADIS"
 
 
-def test_login_instagram():
-    assert "admin" == "admin"
+@pytest.mark.logg
+def test_login_fb():
+    assert "admin" == "admin123"
