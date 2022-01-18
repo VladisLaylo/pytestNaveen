@@ -27,3 +27,7 @@ def test_np_title(init_driver):
 def test_np_urls(init_driver):
     assert driver.current_url == "https://vladis03.bugfocus.com/numberprovisioning/provider"
     print("URL found: " + driver.current_url)
+
+"""
+pip install fixture
+"""
