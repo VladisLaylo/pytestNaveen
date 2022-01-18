@@ -56,7 +56,7 @@ def test_expand_tenants_menu_in_orders():  # didn't find options_list
         if ele.text == "a3Tenant61.com":  # click on this keyword
             ele.click()
             break  # break the loop
-    print("You did expand the menu and select tenant a3Tenant61")
+    print("You did expand the menu and tenant a3Tenant61 selected")
 
 
 """
