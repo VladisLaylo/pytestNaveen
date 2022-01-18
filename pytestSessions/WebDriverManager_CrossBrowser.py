@@ -22,7 +22,7 @@ else:
     print("Please pass the correct browser name in WebDriverManager_CrossBrowser.py file: " + browserName)
     raise Exception('driver is not found in WebDriverManager_CrossBrowser.py')
 
-driver.implicitly_wait(2)
+driver.implicitly_wait(10)
 driver.get("https://vladis03.bugfocus.com/numberprovisioning/provider")
 driver.find_element(By.ID, 'username').send_keys("admin")
 driver.find_element(By.ID, 'password').send_keys("password")
