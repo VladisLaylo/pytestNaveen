@@ -1,4 +1,3 @@
-# lesson https://www.youtube.com/watch?v=86nEglbjvIk
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 import time
@@ -24,3 +23,7 @@ print("Key was sent to >", driver.title)  # what to do
 
 time.sleep(2)  # close browser after secs
 driver.quit()
+
+"""
+# lesson https://www.youtube.com/watch?v=86nEglbjvIk
+"""

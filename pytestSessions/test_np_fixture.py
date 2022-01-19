@@ -32,33 +32,49 @@ def test_np_urls(init_driver):
     print("URL found: " + driver.current_url)
 
 
-def test_login():
+def test_login_into_np():
     driver.find_element(By.ID, 'username').send_keys("admin")
     driver.find_element(By.ID, 'password').send_keys("password")
     driver.find_element(By.XPATH, '//*[@id="appContainer"]/div/div/div/div[2]/form/div/div[3]/div/button').click()
     print("You are logged in")
 
 
-def test_click_on_ph():
+def test_open_orders_page():
     time.sleep(2)
     driver.find_element(By.XPATH, '//*[@id="appContainer"]/div/div[1]/div/a[2]').click()
-    print("You are on Orders page")
+    print("You are on Orders page before tenant selected")
 
 
-def test_expand_tenants_menu_in_orders():  # didn't find options_list
+def test_expand_tenants_menu_on_orders_page():  # didn't find options_list
     time.sleep(2)
     driver.find_element(By.XPATH, '//*[@id="appContainer"]/div/div[2]/div[1]/div[4]/div/div/div[2]/div/i').click()
-    options_list = driver.find_elements(By.XPATH, '//*[@id="appContainer"]/div/div[2]/div[1]/div[4]/div/div/div['
+    """options_list = driver.find_elements(By.XPATH, '//*[@id="appContainer"]/div/div[2]/div[1]/div[4]/div/div/div['
                                                   '2]/div/div[2]')  # find all prediction keywords
+    print(options_list.text)  # print all prediction keywords"""
 
-    for ele in options_list:  # print all prediction keywords
-        print(ele.text)
+
+def test_select_tenant_on_orders_page():
+    time.sleep(2)
+    driver.find_element(By.XPATH, "//span[text()='a3Tenant61.com']").click()
+    print("Tenant named: a3Tenant61.com selected")
+
+    """for ele in keyword_tenant:  # print tenant name and click
+        # print(ele.text)
         if ele.text == "a3Tenant61.com":  # click on this keyword
             ele.click()
-            break  # break the loop
-    print("You did expand the menu and tenant a3Tenant61 selected")
+            print("You did expand the menu and tenant a3Tenant61 selected")
+            break  # break the loop"""
 
 
 """
+pytest test_np_fixture.py -v --capture=tee-sys --html=np_test_fixture_report.html
+
 pip install fixture
+
+# to find prediction keyword check lesson https://www.youtube.com/watch?v=86nEglbjvIk
+google: Naveen Automationlabs
+ul.erkvQe li span
+
+//span[text()='a3Tenant61.com']
+
 """
