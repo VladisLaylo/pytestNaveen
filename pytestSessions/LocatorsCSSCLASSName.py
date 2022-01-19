@@ -21,11 +21,16 @@ driver.quit()
 """
 pytest LocatorsCSSCLASSName.py
 
-Show to create CSS_SELECTOR if not present?
+How to create CSS_SELECTOR if not present?
+
 1) if ID="username" is available put # in front name of ID to convert it to (By.CSS_SELECTOR, '#username'), 
+
 2) if class="ui fluid primary button _9KiXtv4-sIyPsj0NCycBi nsNrtkvKxNxggQKoZjiWM"
+
 2.1) replace all spaces in class by dots '.' and put dot infront, 
 e.g. ".ui.fluid.primary.button._9KiXtv4-sIyPsj0NCycBi.nsNrtkvKxNxggQKoZjiWM"
+
 2.2) if doesn't work and put "input" in front 
 e.g. "input.ui.fluid.primary.button._9KiXtv4-sIyPsj0NCycBi.nsNrtkvKxNxggQKoZjiWM"
+
 """
