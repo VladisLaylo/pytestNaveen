@@ -24,13 +24,10 @@ def init_driver():
 
 def test_bp_copyright(init_driver):
     bp_copyright = driver.find_element(By.CLASS_NAME, '_1WJJJRCXMXVPbjuQ4cAKzA')
-    print("Title found: " + bp_copyright.text)
-    """if np_title.text == "Powered by Bright Pattern":
-        print("Title found: " + np_title)
-    elif np_title.text == "Document":
-        print("Title found: " + np_title)
+    if bp_copyright.text == "Powered by Bright Pattern":
+        print("Bright Pattern Copyright found: " + bp_copyright.text)
     else:
-        print("Title was not found")"""
+        print("Bright Pattern Copyright was not found")
 
 
 def test_np_urls(init_driver):
