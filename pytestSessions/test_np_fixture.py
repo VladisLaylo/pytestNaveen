@@ -48,9 +48,7 @@ def test_open_orders_page():
 def test_expand_tenants_menu_on_orders_page():  # didn't find options_list
     time.sleep(2)
     driver.find_element(By.XPATH, '//*[@id="appContainer"]/div/div[2]/div[1]/div[4]/div/div/div[2]/div/i').click()
-    """options_list = driver.find_elements(By.XPATH, '//*[@id="appContainer"]/div/div[2]/div[1]/div[4]/div/div/div['
-                                                  '2]/div/div[2]')  # find all prediction keywords
-    print(options_list.text)  # print all prediction keywords"""
+    print("Tenant menu expanded and collapsed")
 
 
 def test_select_tenant_on_orders_page():
@@ -58,12 +56,23 @@ def test_select_tenant_on_orders_page():
     driver.find_element(By.XPATH, "//span[text()='a3Tenant61.com']").click()
     print("Tenant named: a3Tenant61.com selected")
 
-    """for ele in keyword_tenant:  # print tenant name and click
-        # print(ele.text)
-        if ele.text == "a3Tenant61.com":  # click on this keyword
-            ele.click()
-            print("You did expand the menu and tenant a3Tenant61 selected")
-            break  # break the loop"""
+
+def test_open_order_details_page():
+    time.sleep(2)
+    driver.find_element(By.XPATH, '//*[@id="appContainer"]/div/div[2]/div[1]/div[4]/div[3]/div/div[1]/span').click()
+    print("First order details page opened")
+
+
+def test_return_to_orders_page():
+    time.sleep(2)
+    driver.find_element(By.XPATH, '//*[@id="appContainer"]/div/div[2]/div[1]/div[1]/i').click()
+    print("Returned to Orders page")
+
+
+def test_np_logout():
+    time.sleep(2)
+    driver.find_element(By.XPATH, '//*[@id="appContainer"]/div/div[2]/div[1]/div[1]/div[2]/button').click()
+    print("Logged out")
 
 
 """
