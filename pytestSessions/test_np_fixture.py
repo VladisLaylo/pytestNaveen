@@ -22,9 +22,15 @@ def init_driver():
     driver.quit()
 
 
-def test_np_title(init_driver):
-    assert driver.title == "Phone number provisioning"
-    print("Title found: " + driver.title)
+def test_bp_copyright(init_driver):
+    bp_copyright = driver.find_element(By.CLASS_NAME, '_1WJJJRCXMXVPbjuQ4cAKzA')
+    print("Title found: " + bp_copyright.text)
+    """if np_title.text == "Powered by Bright Pattern":
+        print("Title found: " + np_title)
+    elif np_title.text == "Document":
+        print("Title found: " + np_title)
+    else:
+        print("Title was not found")"""
 
 
 def test_np_urls(init_driver):
@@ -87,3 +93,7 @@ ul.erkvQe li span
 //span[text()='a3Tenant61.com']
 
 """
+
+"""def test_np_title(init_driver):
+    assert driver.title == "Phone number provisioning"
+    print("Title found: " + driver.title)"""

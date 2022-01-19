@@ -2,7 +2,8 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 import time
 
-driver = webdriver.Chrome(executable_path="C:\webdrivers\chromedriver.exe")  # folder for web drivers
+# driver = webdriver.Chrome(executable_path="C:\webdrivers\chromedriver.exe")  # folder for web drivers
+driver = webdriver.Chrome(executable_path="/Users/vanamali/Downloads/chromedriver")  # folder for web drivers
 driver.implicitly_wait(5)  # waiting time
 driver.get("https://google.com")  # open web page
 
