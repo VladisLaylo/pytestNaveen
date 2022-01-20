@@ -48,7 +48,7 @@ def test_open_orders_page():
     print("You are on Orders page before tenant selected")
 
 
-def test_expand_tenants_menu_on_orders_page():  # didn't find options_list
+def test_expand_tenants_menu_on_orders_page():  # find options_list
     time.sleep(2)
     driver.find_element(By.XPATH, '//*[@id="appContainer"]/div/div[2]/div[1]/div[4]/div/div/div[2]/div/i').click()
     print("Tenant menu expanded and collapsed")

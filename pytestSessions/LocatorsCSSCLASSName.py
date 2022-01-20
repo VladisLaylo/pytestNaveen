@@ -27,7 +27,7 @@ How to create CSS_SELECTOR if not present?
 
 2) if class="ui fluid primary button _9KiXtv4-sIyPsj0NCycBi nsNrtkvKxNxggQKoZjiWM"
 
-2.1) replace all spaces in class by dots '.' and put dot infront, 
+2.1) replace all spaces in class by dots '.' and put dot in front, 
 e.g. ".ui.fluid.primary.button._9KiXtv4-sIyPsj0NCycBi.nsNrtkvKxNxggQKoZjiWM"
 
 2.2) if doesn't work and put "input" in front 
