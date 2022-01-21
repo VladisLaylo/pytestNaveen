@@ -1,12 +1,14 @@
 from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
 
 import time
 
-driver = webdriver.Chrome(ChromeDriverManager().install())
+# driver = webdriver.Chrome(ChromeDriverManager().install())
+driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
 driver.implicitly_wait(10)
-driver.get("https://vladis01.bugfocus.com/numberprovisioning/provider/")
+driver.get("https://vladis03.bugfocus.com/numberprovisioning/provider/")
 
 # driver.find_element(By.CSS_SELECTOR, '#username').send_keys("admin")
 driver.find_element(By.CLASS_NAME, 'ui input').send_keys("admin")
