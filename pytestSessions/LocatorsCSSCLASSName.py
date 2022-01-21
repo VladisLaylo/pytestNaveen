@@ -6,13 +6,13 @@ import time
 
 driver = webdriver.Chrome(ChromeDriverManager().install())
 driver.implicitly_wait(10)
-driver.get("https://vladis03.bugfocus.com/numberprovisioning/provider/")
+driver.get("https://vladis01.bugfocus.com/numberprovisioning/provider/")
 
 # driver.find_element(By.CSS_SELECTOR, '#username').send_keys("admin")
 driver.find_element(By.CLASS_NAME, 'ui input').send_keys("admin")
-
 driver.find_element(By.NAME, 'password').send_keys("password")
 time.sleep(1)
+
 driver.find_element(By.CSS_SELECTOR, '.ui.fluid.primary.button._9KiXtv4-sIyPsj0NCycBi.nsNrtkvKxNxggQKoZjiWM').click()
 
 time.sleep(2)
