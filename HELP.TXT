@@ -1,0 +1,46 @@
+pip list --outdated
+
+pip install pytest-html
+
+pip install fixture
+
+Setup generate to HTML report:
+
+1. PyCharm Terminal > pip install pytest-html
+2. py.test test_webpage_np.py -v -s --html=np_test_report.html
+or
+3. pytest LocatorsConcept.py -v --capture=tee-sys --html=LocatorsConcept_report.html
+
+* if you want to change css styles in project folder: assets/style.css
+
+How to setup cross-browser selenium driver:
+
+1. Google search: webdriver manager python
+2. https://pypi.org/project/webdriver-manager/
+3. PyCharm Terminal > pip install webdriver-manager
+4. from webdriver_manager.chrome import ChromeDriverManager (top file code)
+
+SELECTORS:
+
+How to create CSS_SELECTOR if not present?
+
+1) if ID="username" is available put # in front name of ID to convert it to (By.CSS_SELECTOR, '#username'),
+
+2) if class="ui fluid primary button _9KiXtv4-sIyPsj0NCycBi nsNrtkvKxNxggQKoZjiWM"
+
+2.1) replace all spaces in class by dots '.' and put dot in front,
+e.g. ".ui.fluid.primary.button._9KiXtv4-sIyPsj0NCycBi.nsNrtkvKxNxggQKoZjiWM"
+
+2.2) if doesn't work and put "input" in front
+e.g. "input.ui.fluid.primary.button._9KiXtv4-sIyPsj0NCycBi.nsNrtkvKxNxggQKoZjiWM"
+
+PREDICTION KEYWORD # to find prediction keyword check lesson https://www.youtube.com/watch?v=86nEglbjvIk
+
+google: Naveen Automationlabs
+
+ul.erkvQe li span
+
+FIND BY TEXT:
+
+if: <div>My Button</div>  ---- //div[text()='My Button']
+if: <span>My Button</span> ---- //span[text()='My Button']

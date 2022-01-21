@@ -1,4 +1,5 @@
 from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
 import pytest
@@ -11,7 +12,7 @@ driver = None
 def init_driver():
     global driver
     # print("------------setup------------")
-    driver = webdriver.Chrome(ChromeDriverManager().install())
+    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
     driver.implicitly_wait(10)
     driver.delete_all_cookies()
     driver.get('https://vladis03.bugfocus.com/numberprovisioning/provider')
@@ -81,13 +82,23 @@ def test_np_logout():
 """
 pytest test_np_fixture.py -v --capture=tee-sys --html=np_test_fixture_report.html
 
+pip install pytest-html
+
 pip install fixture
 
 # to find prediction keyword check lesson https://www.youtube.com/watch?v=86nEglbjvIk
 google: Naveen Automationlabs
+
 ul.erkvQe li span
 
 //span[text()='a3Tenant61.com']
+
+# to find button by text:
+
+if: <div>My Button</div>
+//div[text()='My Button']
+if: <span>My Button</span>
+//span[text()='My Button']
 
 """
 
