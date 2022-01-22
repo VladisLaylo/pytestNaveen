@@ -1,4 +1,5 @@
 from selenium import webdriver
+from selenium.webdriver import Keys
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
@@ -87,7 +88,8 @@ def test_apply_pass_db(init_driver):
 
 def test_ok_apply(init_driver):
     time.sleep(2)
-    driver.find_element(By.ID, 'x-auto-152').click()  # OK
+    # driver.find_element(By.ID, 'x-auto-152').click()  # OK
+    driver.find_element(By.XPATH, '//*[@id="x-auto-144"]/tbody/tr[2]/td[2]/em/button').send_keys(Keys.ESCAPE)  # OK
     driver.find_element(By.XPATH, '//*[@id="gwt-debug-entity-update"]/tbody/tr[2]/td[2]/em/button').click()  # apply
 
 
