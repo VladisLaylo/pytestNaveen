@@ -44,3 +44,90 @@ FIND BY TEXT:
 
 if: <div>My Button</div>  ---- //div[text()='My Button']
 if: <span>My Button</span> ---- //span[text()='My Button']
+
+SHIFT+COMMAND+4 will give you coordinates in relation to the display
+
+SEND KEY DOWN:
+element.send_keys(" and some", Keys.ARROW_DOWN)
+
+TAB KEY:
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.action_chains import ActionChains
+
+N = 5  # number of times you want to press TAB
+
+actions = ActionChains(browser)
+actions.send_keys(Keys.TAB * N)
+actions.perform()
+----
+# is working fine
+sendkeys(Keys.Tab, Keys.Tab, Keys.Tab)
+----
+ActionChains(driver).send_keys(Keys.TAB * 2).perform()
+-----
+
+LIFE HACK
+actions.move_to_element(element_to_select).perform()
+
+In your case, to select something from the "Socks" menu:
+
+e1 = driver.find_element_by_xpath('//*[@id="nav"]/ol/li[5]/a')
+e2 = e1.find_element_by_xpath('../ul/li[1]/a')
+actions.move_to_element(e1).move_to_element(e2).perform()
+e2.click()
+
+MOVE MOUSE
+def test_to_select_db_server():
+
+    a = ActionChains(driver)  # object of ActionChains
+    m = driver.find_element_by_link_text("Enabled")  # identify element
+    a.move_to_element(m).perform()  # hover over element
+    n = driver.find_element_by_link_text("Back to JQuery UI") # identify sub menu element
+    a.move_to_element(n).click().perform()  # hover over element and click
+
+MOVE MOUSE
+driver = webdriver.Firefox(executable_path=driver_path)
+action = webdriver.ActionChains(driver)
+element = driver.find_element_by_id('your-id') # or your another selector here
+action.move_to_element(element)
+action.perform()
+action.move_by_offset(10, 20)    # 10px to the right, 20px to bottom
+action.perform()
+actions.move_to_element(element_to_select).perform()
+
+MAKE MOUSE MOVE
+
+import pyautogui
+
+==============
+MOISE MOVE GRATE!
+
+pip install pyautogui
+
+select one of the option you need:
+
+pyautogui.click(100, 100)
+pyautogui.moveTo(100, 150)
+pyautogui.moveRel(0, 10)  # move mouse 10 pixels down
+pyautogui.dragTo(100, 150)
+pyautogui.dragRel(0, 10)  # drag mouse 10 pixels down
+
+???     pyautogui.click(x=300, y=300, clicks=3, interval=2, button='right')
+
+====================
+MOVE MOUSE
+import autopy # pip install autopy
+autopy.mouse.smooth_move(100, 600)
+
+===============
+How to create CSS_SELECTOR if not present?
+
+1) if ID="username" is available put # in front name of ID to convert it to (By.CSS_SELECTOR, '#username'),
+
+2) if class="ui fluid primary button _9KiXtv4-sIyPsj0NCycBi nsNrtkvKxNxggQKoZjiWM"
+
+2.1) replace all spaces in class by dots '.' and put dot '.' in front,
+e.g. ".ui.fluid.primary.button._9KiXtv4-sIyPsj0NCycBi.nsNrtkvKxNxggQKoZjiWM"
+
+2.2) if doesn't work and put "input" in front
+e.g. "input.ui.fluid.primary.button._9KiXtv4-sIyPsj0NCycBi.nsNrtkvKxNxggQKoZjiWM"
