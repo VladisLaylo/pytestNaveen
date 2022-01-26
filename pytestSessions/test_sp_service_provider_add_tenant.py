@@ -13,13 +13,13 @@ driver = None
 @pytest.fixture(scope='module')
 def init_driver():
     global driver
-    # print("------------setup------------")
+    print("------------setup------------")
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
     driver.implicitly_wait(10)
     driver.delete_all_cookies()
 
     yield
-    # print("----------tear down----------")
+    print("----------tear down----------")
     time.sleep(5)
     # driver.quit()
 
