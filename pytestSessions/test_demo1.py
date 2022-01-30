@@ -1,7 +1,7 @@
 import pytest
 
 
-@pytest.mark.logg
+@pytest.mark.login  # marker is "login "
 def test_m1():
     a = 3
     b = 4
@@ -14,7 +14,7 @@ def test_m2():
     assert name.upper() == "SELENIUM"
 
 
-@pytest.mark.logg
+@pytest.mark.login  # marker is "login "
 def test_m3():
     assert True
 
@@ -23,7 +23,7 @@ def test_m4():
     assert False
 
 
-@pytest.mark.logg
+@pytest.mark.login  # marker is "login "
 def test_m5():
     assert 100 == 100
 
@@ -32,6 +32,19 @@ def test_m6():
     assert "vladis" == "VLADIS"
 
 
-@pytest.mark.logg
+@pytest.mark.login  # marker is "login "
 def test_login_fb():
     assert "admin" == "admin123"
+
+
+"""
+One by One execution:
+pytest test_demo1.py
+
+Parallel mode:
+
+
+Execute with marker "login":
+pytest -m login
+
+"""
