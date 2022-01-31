@@ -77,7 +77,7 @@ def test_set_status_active(init_driver):
     time.sleep(10)
     driver.find_element(By.XPATH, '//*[@id="x-auto-82"]').click()  # find Status menu expander
     # pyautogui.click(940, 510)  # expand Status menu on MacOS
-    pyautogui.click(933, 453)  # expand Status menu on Windows 10
+    pyautogui.click(935, 476)  # expand Status menu on Windows 10
 
     driver.find_element(By.XPATH, '//*[@id="gwt-debug-entity-update"]/tbody/tr[2]/td[2]/em/button').click()  # apply
 
