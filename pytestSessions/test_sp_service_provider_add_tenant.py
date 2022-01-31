@@ -63,9 +63,9 @@ def test_fill_up_form(init_driver):
 
     driver.find_element(By.ID, 'gwt-debug-newMaxConcurrentUsers-input').send_keys("10")  # Max users
     driver.find_element(By.XPATH, '//*[@id="gwt-debug-newDatabaseServer-input"]').click()  # Click to expand Database
-
+    time.sleep(2)
     # pyautogui.click(700, 835)  # server menu on MacOS
-    pyautogui.click(550, 765)  # server menu on Windows 10
+    pyautogui.click(655, 888)  # server menu on Windows 10
 
     driver.find_element(By.ID, 'gwt-debug-newDbName-input').send_keys("_db")  # Database name
     driver.find_element(By.ID, 'gwt-debug-newDbUser-input').send_keys("_db_usr")  # Username
@@ -76,7 +76,8 @@ def test_fill_up_form(init_driver):
 def test_set_status_active(init_driver):
     time.sleep(10)
     driver.find_element(By.XPATH, '//*[@id="x-auto-82"]').click()  # find Status menu expander
-    pyautogui.click(940, 510)  # expand Status menu
+    # pyautogui.click(940, 510)  # expand Status menu on MacOS
+    pyautogui.click(933, 453)  # expand Status menu on Windows 10
 
     driver.find_element(By.XPATH, '//*[@id="gwt-debug-entity-update"]/tbody/tr[2]/td[2]/em/button').click()  # apply
 
