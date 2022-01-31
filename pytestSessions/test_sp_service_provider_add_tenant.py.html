@@ -243,7 +243,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
 }
 </script>
     <h1>test_sp_service_provider_add_tenant.py.html</h1>
-    <p>Report generated on 31-Jan-2022 at 18:20:32 by <a href="https://pypi.python.org/pypi/pytest-html">pytest-html</a> v3.1.1</p>
+    <p>Report generated on 31-Jan-2022 at 18:30:17 by <a href="https://pypi.python.org/pypi/pytest-html">pytest-html</a> v3.1.1</p>
     <h2>Environment</h2>
     <table id="environment">
       <tr>
@@ -259,8 +259,8 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <td>Python</td>
         <td>3.9.2</td></tr></table>
     <h2>Summary</h2>
-    <p>5 tests ran in 12.53 seconds. </p>
-    <p class="filter" hidden="true">(Un)check the boxes to filter the results.</p><input checked="true" class="filter" data-test-result="passed" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="passed">5 passed</span>, <input checked="true" class="filter" data-test-result="skipped" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="skipped">0 skipped</span>, <input checked="true" class="filter" data-test-result="failed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="failed">0 failed</span>, <input checked="true" class="filter" data-test-result="error" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="error">0 errors</span>, <input checked="true" class="filter" data-test-result="xfailed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="xfailed">0 expected failures</span>, <input checked="true" class="filter" data-test-result="xpassed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="xpassed">0 unexpected passes</span>
+    <p>8 tests ran in 29.76 seconds. </p>
+    <p class="filter" hidden="true">(Un)check the boxes to filter the results.</p><input checked="true" class="filter" data-test-result="passed" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="passed">7 passed</span>, <input checked="true" class="filter" data-test-result="skipped" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="skipped">0 skipped</span>, <input checked="true" class="filter" data-test-result="failed" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="failed">1 failed</span>, <input checked="true" class="filter" data-test-result="error" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="error">0 errors</span>, <input checked="true" class="filter" data-test-result="xfailed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="xfailed">0 expected failures</span>, <input checked="true" class="filter" data-test-result="xpassed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="xpassed">0 unexpected passes</span>
     <h2>Results</h2>
     <table id="results-table">
       <thead id="results-table-head">
@@ -271,11 +271,21 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
           <th class="sortable links" col="links">Links</th></tr>
         <tr hidden="true" id="not-found-message">
           <th colspan="4">No results found. Try to check the filters</th></tr></thead>
+      <tbody class="failed results-table-row">
+        <tr>
+          <td class="col-result">Failed</td>
+          <td class="col-name">test_sp_service_provider_add_tenant.py::test_ok_apply</td>
+          <td class="col-duration">7.00</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log">init_driver = None<br/><br/>    def test_ok_apply(init_driver):<br/>        time.sleep(2)<br/>        # driver.find_element(By.ID, &#x27;x-auto-152&#x27;).click()  # OK<br/>&gt;       driver.send_keys(Keys.ESCAPE)  # Escape modal window with OK button<br/><span class="error">E       AttributeError: &#x27;WebDriver&#x27; object has no attribute &#x27;send_keys&#x27;</span><br/><br/>test_sp_service_provider_add_tenant.py:95: AttributeError<br/> ----------------------------Captured stdout teardown---------------------------- <br/>----------tear down----------
+<br/></div></td></tr></tbody>
       <tbody class="passed results-table-row">
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">test_sp_service_provider_add_tenant.py::test_sp_logo</td>
-          <td class="col-duration">2.46</td>
+          <td class="col-duration">2.41</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -297,7 +307,7 @@ INFO     WDM:logger.py:26 Driver [C:\Users\User QA\.wdm\drivers\chromedriver\win
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">test_sp_service_provider_add_tenant.py::test_login_into_sysmgmt</td>
-          <td class="col-duration">0.17</td>
+          <td class="col-duration">0.16</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -307,7 +317,7 @@ INFO     WDM:logger.py:26 Driver [C:\Users\User QA\.wdm\drivers\chromedriver\win
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">test_sp_service_provider_add_tenant.py::test_open_tenants_page</td>
-          <td class="col-duration">2.07</td>
+          <td class="col-duration">2.08</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -317,7 +327,7 @@ INFO     WDM:logger.py:26 Driver [C:\Users\User QA\.wdm\drivers\chromedriver\win
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">test_sp_service_provider_add_tenant.py::test_click_add_new_tenant</td>
-          <td class="col-duration">2.05</td>
+          <td class="col-duration">2.06</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -326,7 +336,25 @@ INFO     WDM:logger.py:26 Driver [C:\Users\User QA\.wdm\drivers\chromedriver\win
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">test_sp_service_provider_add_tenant.py::test_fill_up_form</td>
-          <td class="col-duration">0.00</td>
+          <td class="col-duration">3.32</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">test_sp_service_provider_add_tenant.py::test_set_status_active</td>
+          <td class="col-duration">10.30</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">test_sp_service_provider_add_tenant.py::test_apply_pass_db</td>
+          <td class="col-duration">2.12</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">

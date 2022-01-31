@@ -17,6 +17,7 @@ def init_driver():
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
     driver.implicitly_wait(10)
     driver.delete_all_cookies()
+    driver.maximize_window()
 
     yield
     print("----------tear down----------")
@@ -65,7 +66,7 @@ def test_fill_up_form(init_driver):
     driver.find_element(By.XPATH, '//*[@id="gwt-debug-newDatabaseServer-input"]').click()  # Click to expand Database
     time.sleep(2)
     # pyautogui.click(700, 835)  # server menu on MacOS
-    pyautogui.click(655, 888)  # server menu on Windows 10
+    pyautogui.click(1130, 890)  # server menu on Windows 10
 
     driver.find_element(By.ID, 'gwt-debug-newDbName-input').send_keys("_db")  # Database name
     driver.find_element(By.ID, 'gwt-debug-newDbUser-input').send_keys("_db_usr")  # Username
@@ -77,7 +78,7 @@ def test_set_status_active(init_driver):
     time.sleep(10)
     driver.find_element(By.XPATH, '//*[@id="x-auto-82"]').click()  # find Status menu expander
     # pyautogui.click(940, 510)  # expand Status menu on MacOS
-    pyautogui.click(935, 476)  # expand Status menu on Windows 10
+    pyautogui.click(1320, 458)  # expand Status menu on Windows 10
 
     driver.find_element(By.XPATH, '//*[@id="gwt-debug-entity-update"]/tbody/tr[2]/td[2]/em/button').click()  # apply
 
@@ -85,13 +86,13 @@ def test_set_status_active(init_driver):
 def test_apply_pass_db(init_driver):
     time.sleep(2)
     driver.find_element(By.XPATH, '//*[@id="gwt-debug-dbPassword-input"]').send_keys("password")  # send password
-    driver.find_element(By.XPATH, '//*[@id="x-auto-136"]/tbody/tr[2]/td[2]/em/button').click()  # click Apply on DB
+    driver.find_element(By.XPATH, '//*[@id="x-auto-133"]/tbody/tr[2]/td[2]/em/button').click()  # click Apply on DB
 
 
 def test_ok_apply(init_driver):
     time.sleep(2)
     # driver.find_element(By.ID, 'x-auto-152').click()  # OK
-    driver.find_element(By.XPATH, '//*[@id="x-auto-144"]/tbody/tr[2]/td[2]/em/button').send_keys(Keys.ESCAPE)  # OK
+    driver.send_keys(Keys.ESCAPE)  # Escape modal window with OK button
     driver.find_element(By.XPATH, '//*[@id="gwt-debug-entity-update"]/tbody/tr[2]/td[2]/em/button').click()  # apply
 
 
