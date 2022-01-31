@@ -62,9 +62,10 @@ def test_fill_up_form(init_driver):
     driver.find_element(By.ID, 'gwt-debug-newEmail-input').send_keys("t1@brightpattern.com")  # Email
 
     driver.find_element(By.ID, 'gwt-debug-newMaxConcurrentUsers-input').send_keys("10")  # Max users
-    driver.find_element(By.XPATH, '//*[@id="gwt-debug-newDatabaseServer-input"]').click()  # CLick to expand Database
-    # server menu
-    pyautogui.click(700, 835)
+    driver.find_element(By.XPATH, '//*[@id="gwt-debug-newDatabaseServer-input"]').click()  # Click to expand Database
+
+    # pyautogui.click(700, 835)  # server menu on MacOS
+    pyautogui.click(550, 765)  # server menu on Windows 10
 
     driver.find_element(By.ID, 'gwt-debug-newDbName-input').send_keys("_db")  # Database name
     driver.find_element(By.ID, 'gwt-debug-newDbUser-input').send_keys("_db_usr")  # Username
