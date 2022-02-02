@@ -22,7 +22,7 @@ def init_driver():
     yield
     print("----------tear down----------")
     time.sleep(5)
-    # driver.quit()
+    driver.quit()
 
 
 def test_sp_logo(init_driver):
@@ -78,7 +78,7 @@ def test_set_status_active(init_driver):
     time.sleep(10)
     driver.find_element(By.XPATH, '//*[@id="x-auto-82"]').click()  # find Status menu expander
     # pyautogui.click(940, 510)  # expand Status menu on MacOS
-    pyautogui.click(1320, 458)  # expand Status menu on Windows 10
+    pyautogui.click(1100, 458)  # expand Status menu on Windows 10
 
     driver.find_element(By.XPATH, '//*[@id="gwt-debug-entity-update"]/tbody/tr[2]/td[2]/em/button').click()  # apply
 
@@ -92,11 +92,12 @@ def test_apply_pass_db(init_driver):
 def test_ok_apply(init_driver):
     time.sleep(2)
     # driver.find_element(By.ID, 'x-auto-152').click()  # OK
-    driver.send_keys(Keys.ESCAPE)  # Escape modal window with OK button
+    webdriver.ActionChains(driver).send_keys(Keys.ESCAPE).perform()  # Escape modal window with OK button
+    # driver.send_keys(Keys.ESCAPE)  # Escape modal window with OK button
     driver.find_element(By.XPATH, '//*[@id="gwt-debug-entity-update"]/tbody/tr[2]/td[2]/em/button').click()  # apply
 
 
 """
-pytest test_sp_service_provider_add_tenant.py -v --capture=tee-sys --html=test_sp_service_provider_add_tenant.py.html
+pytest pytestSessions/test_sp_service_provider_add_tenant.py -v --capture=tee-sys --html=test_sp_service_provider_add_tenant.py.html
 
 """
