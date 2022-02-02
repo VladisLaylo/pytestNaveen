@@ -16,12 +16,12 @@ time.sleep(3)
 driver.find_element(By.XPATH, '/html/body/div[1]/div[2]/div[4]/div[2]/div/a').click()  # accept cookies
 
 
-def select_values(element, value):  # method to select value
+def select_values(element, value):  # Method to select value in GENERIC METHODS For any list
     select = Select(element)
     select.select_by_visible_text(value)
 
 
-def select_value_from_dropdown(drop_down_options_list, value):  # GENERIC METHODS For any list
+def select_values_from_dropdown(drop_down_options_list, value):  # GENERIC METHODS For any list
     print(len(drop_down_options_list))
     for ele in drop_down_options_list:
         print(ele.text)
@@ -31,7 +31,7 @@ def select_value_from_dropdown(drop_down_options_list, value):  # GENERIC METHOD
 
 
 country_options = driver.find_elements(By.XPATH, '//select[@id="Form_submitForm_Country"]/option')
-select_value_from_dropdown(country_options, 'United States')
+select_values_from_dropdown(country_options, 'United States')
 
 """
 country_options = driver.find_elements(By.XPATH, '//select[@id="Form_submitForm_Country"]/option')
