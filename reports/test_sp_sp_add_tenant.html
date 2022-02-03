@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <title>Test Report</title>
+    <link href="assets/style.css" rel="stylesheet" type="text/css"/></head>
+  <body onLoad="init()">
+    <script>/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+
+function toArray(iter) {
+    if (iter === null) {
+        return null;
+    }
+    return Array.prototype.slice.call(iter);
+}
+
+function find(selector, elem) { // eslint-disable-line no-redeclare
+    if (!elem) {
+        elem = document;
+    }
+    return elem.querySelector(selector);
+}
+
+function findAll(selector, elem) {
+    if (!elem) {
+        elem = document;
+    }
+    return toArray(elem.querySelectorAll(selector));
+}
+
+function sortColumn(elem) {
+    toggleSortStates(elem);
+    const colIndex = toArray(elem.parentNode.childNodes).indexOf(elem);
+    let key;
+    if (elem.classList.contains('result')) {
+        key = keyResult;
+    } else if (elem.classList.contains('links')) {
+        key = keyLink;
+    } else {
+        key = keyAlpha;
+    }
+    sortTable(elem, key(colIndex));
+}
+
+function showAllExtras() { // eslint-disable-line no-unused-vars
+    findAll('.col-result').forEach(showExtras);
+}
+
+function hideAllExtras() { // eslint-disable-line no-unused-vars
+    findAll('.col-result').forEach(hideExtras);
+}
+
+function showExtras(colresultElem) {
+    const extras = colresultElem.parentNode.nextElementSibling;
+    const expandcollapse = colresultElem.firstElementChild;
+    extras.classList.remove('collapsed');
+    expandcollapse.classList.remove('expander');
+    expandcollapse.classList.add('collapser');
+}
+
+function hideExtras(colresultElem) {
+    const extras = colresultElem.parentNode.nextElementSibling;
+    const expandcollapse = colresultElem.firstElementChild;
+    extras.classList.add('collapsed');
+    expandcollapse.classList.remove('collapser');
+    expandcollapse.classList.add('expander');
+}
+
+function showFilters() {
+    const filterItems = document.getElementsByClassName('filter');
+    for (let i = 0; i < filterItems.length; i++)
+        filterItems[i].hidden = false;
+}
+
+function addCollapse() {
+    // Add links for show/hide all
+    const resulttable = find('table#results-table');
+    const showhideall = document.createElement('p');
+    showhideall.innerHTML = '<a href="javascript:showAllExtras()">Show all details</a> / ' +
+                            '<a href="javascript:hideAllExtras()">Hide all details</a>';
+    resulttable.parentElement.insertBefore(showhideall, resulttable);
+
+    // Add show/hide link to each result
+    findAll('.col-result').forEach(function(elem) {
+        const collapsed = getQueryParameter('collapsed') || 'Passed';
+        const extras = elem.parentNode.nextElementSibling;
+        const expandcollapse = document.createElement('span');
+        if (extras.classList.contains('collapsed')) {
+            expandcollapse.classList.add('expander');
+        } else if (collapsed.includes(elem.innerHTML)) {
+            extras.classList.add('collapsed');
+            expandcollapse.classList.add('expander');
+        } else {
+            expandcollapse.classList.add('collapser');
+        }
+        elem.appendChild(expandcollapse);
+
+        elem.addEventListener('click', function(event) {
+            if (event.currentTarget.parentNode.nextElementSibling.classList.contains('collapsed')) {
+                showExtras(event.currentTarget);
+            } else {
+                hideExtras(event.currentTarget);
+            }
+        });
+    });
+}
+
+function getQueryParameter(name) {
+    const match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
+    return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
+}
+
+function init () { // eslint-disable-line no-unused-vars
+    resetSortHeaders();
+
+    addCollapse();
+
+    showFilters();
+
+    sortColumn(find('.initial-sort'));
+
+    findAll('.sortable').forEach(function(elem) {
+        elem.addEventListener('click',
+            function() {
+                sortColumn(elem);
+            }, false);
+    });
+}
+
+function sortTable(clicked, keyFunc) {
+    const rows = findAll('.results-table-row');
+    const reversed = !clicked.classList.contains('asc');
+    const sortedRows = sort(rows, keyFunc, reversed);
+    /* Whole table is removed here because browsers acts much slower
+     * when appending existing elements.
+     */
+    const thead = document.getElementById('results-table-head');
+    document.getElementById('results-table').remove();
+    const parent = document.createElement('table');
+    parent.id = 'results-table';
+    parent.appendChild(thead);
+    sortedRows.forEach(function(elem) {
+        parent.appendChild(elem);
+    });
+    document.getElementsByTagName('BODY')[0].appendChild(parent);
+}
+
+function sort(items, keyFunc, reversed) {
+    const sortArray = items.map(function(item, i) {
+        return [keyFunc(item), i];
+    });
+
+    sortArray.sort(function(a, b) {
+        const keyA = a[0];
+        const keyB = b[0];
+
+        if (keyA == keyB) return 0;
+
+        if (reversed) {
+            return keyA < keyB ? 1 : -1;
+        } else {
+            return keyA > keyB ? 1 : -1;
+        }
+    });
+
+    return sortArray.map(function(item) {
+        const index = item[1];
+        return items[index];
+    });
+}
+
+function keyAlpha(colIndex) {
+    return function(elem) {
+        return elem.childNodes[1].childNodes[colIndex].firstChild.data.toLowerCase();
+    };
+}
+
+function keyLink(colIndex) {
+    return function(elem) {
+        const dataCell = elem.childNodes[1].childNodes[colIndex].firstChild;
+        return dataCell == null ? '' : dataCell.innerText.toLowerCase();
+    };
+}
+
+function keyResult(colIndex) {
+    return function(elem) {
+        const strings = ['Error', 'Failed', 'Rerun', 'XFailed', 'XPassed',
+            'Skipped', 'Passed'];
+        return strings.indexOf(elem.childNodes[1].childNodes[colIndex].firstChild.data);
+    };
+}
+
+function resetSortHeaders() {
+    findAll('.sort-icon').forEach(function(elem) {
+        elem.parentNode.removeChild(elem);
+    });
+    findAll('.sortable').forEach(function(elem) {
+        const icon = document.createElement('div');
+        icon.className = 'sort-icon';
+        icon.textContent = 'vvv';
+        elem.insertBefore(icon, elem.firstChild);
+        elem.classList.remove('desc', 'active');
+        elem.classList.add('asc', 'inactive');
+    });
+}
+
+function toggleSortStates(elem) {
+    //if active, toggle between asc and desc
+    if (elem.classList.contains('active')) {
+        elem.classList.toggle('asc');
+        elem.classList.toggle('desc');
+    }
+
+    //if inactive, reset all other functions and add ascending active
+    if (elem.classList.contains('inactive')) {
+        resetSortHeaders();
+        elem.classList.remove('inactive');
+        elem.classList.add('active');
+    }
+}
+
+function isAllRowsHidden(value) {
+    return value.hidden == false;
+}
+
+function filterTable(elem) { // eslint-disable-line no-unused-vars
+    const outcomeAtt = 'data-test-result';
+    const outcome = elem.getAttribute(outcomeAtt);
+    const classOutcome = outcome + ' results-table-row';
+    const outcomeRows = document.getElementsByClassName(classOutcome);
+
+    for(let i = 0; i < outcomeRows.length; i++){
+        outcomeRows[i].hidden = !elem.checked;
+    }
+
+    const rows = findAll('.results-table-row').filter(isAllRowsHidden);
+    const allRowsHidden = rows.length == 0 ? true : false;
+    const notFoundMessage = document.getElementById('not-found-message');
+    notFoundMessage.hidden = !allRowsHidden;
+}
+</script>
+    <h1>test_sp_sp_add_tenant.html</h1>
+    <p>Report generated on 03-Feb-2022 at 18:24:38 by <a href="https://pypi.python.org/pypi/pytest-html">pytest-html</a> v3.1.1</p>
+    <h2>Environment</h2>
+    <table id="environment">
+      <tr>
+        <td>Packages</td>
+        <td>{"pluggy": "1.0.0", "py": "1.11.0", "pytest": "6.2.5"}</td></tr>
+      <tr>
+        <td>Platform</td>
+        <td>Windows-10-10.0.19044-SP0</td></tr>
+      <tr>
+        <td>Plugins</td>
+        <td>{"html": "3.1.1", "metadata": "1.11.0"}</td></tr>
+      <tr>
+        <td>Python</td>
+        <td>3.10.2</td></tr></table>
+    <h2>Summary</h2>
+    <p>15 tests ran in 48.25 seconds. </p>
+    <p class="filter" hidden="true">(Un)check the boxes to filter the results.</p><input checked="true" class="filter" data-test-result="passed" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="passed">14 passed</span>, <input checked="true" class="filter" data-test-result="skipped" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="skipped">0 skipped</span>, <input checked="true" class="filter" data-test-result="failed" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="failed">1 failed</span>, <input checked="true" class="filter" data-test-result="error" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="error">0 errors</span>, <input checked="true" class="filter" data-test-result="xfailed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="xfailed">0 expected failures</span>, <input checked="true" class="filter" data-test-result="xpassed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="xpassed">0 unexpected passes</span>
+    <h2>Results</h2>
+    <table id="results-table">
+      <thead id="results-table-head">
+        <tr>
+          <th class="sortable result initial-sort" col="result">Result</th>
+          <th class="sortable" col="name">Test</th>
+          <th class="sortable" col="duration">Duration</th>
+          <th class="sortable links" col="links">Links</th></tr>
+        <tr hidden="true" id="not-found-message">
+          <th colspan="4">No results found. Try to check the filters</th></tr></thead>
+      <tbody class="failed results-table-row">
+        <tr>
+          <td class="col-result">Failed</td>
+          <td class="col-name">pytestSessions/test_sp_service_provider_add_tenant.py::test_apply_pass_db</td>
+          <td class="col-duration">12.16</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log">init_driver = None<br/><br/>    def test_apply_pass_db(init_driver):<br/>        time.sleep(2)<br/>        driver.find_element(By.XPATH, &#x27;//*[@id=&quot;gwt-debug-dbPassword-input&quot;]&#x27;).send_keys(&quot;password&quot;)  # send password<br/>&gt;       driver.find_element(By.XPATH, &#x27;//*[@id=&quot;x-auto-101&quot;]/tbody/tr[2]/td[2]/em/button&#x27;).click()  # click Apply to DB<br/><br/>pytestSessions\test_sp_service_provider_add_tenant.py:146: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ <br/>..\numberprovisioning\venv\lib\site-packages\selenium\webdriver\remote\webdriver.py:1244: in find_element<br/>    return self.execute(Command.FIND_ELEMENT, {<br/>..\numberprovisioning\venv\lib\site-packages\selenium\webdriver\remote\webdriver.py:424: in execute<br/>    self.error_handler.check_response(response)<br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ <br/><br/>self = &lt;selenium.webdriver.remote.errorhandler.ErrorHandler object at 0x000001E7C6BF33D0&gt;<br/>response = {&#x27;status&#x27;: 404, &#x27;value&#x27;: &#x27;{&quot;value&quot;:{&quot;error&quot;:&quot;no such element&quot;,&quot;message&quot;:&quot;no such element: Unable to locate element: {\...\n\\tRtlGetAppContainerNamedObjectPath [0x77997A9E+286]\\n\\tRtlGetAppContainerNamedObjectPath [0x77997A6E+238]\\n&quot;}}&#x27;}<br/><br/>    def check_response(self, response: Dict[str, Any]) -&gt; None:<br/>        &quot;&quot;&quot;<br/>        Checks that a JSON response from the WebDriver does not have an error.<br/>    <br/>        :Args:<br/>         - response - The JSON response from the WebDriver server as a dictionary<br/>           object.<br/>    <br/>        :Raises: If the response contains an error message.<br/>        &quot;&quot;&quot;<br/>        status = response.get(&#x27;status&#x27;, None)<br/>        if not status or status == ErrorCode.SUCCESS:<br/>            return<br/>        value = None<br/>        message = response.get(&quot;message&quot;, &quot;&quot;)<br/>        screen: str = response.get(&quot;screen&quot;, &quot;&quot;)<br/>        stacktrace = None<br/>        if isinstance(status, int):<br/>            value_json = response.get(&#x27;value&#x27;, None)<br/>            if value_json and isinstance(value_json, str):<br/>                import json<br/>                try:<br/>                    value = json.loads(value_json)<br/>                    if len(value.keys()) == 1:<br/>                        value = value[&#x27;value&#x27;]<br/>                    status = value.get(&#x27;error&#x27;, None)<br/>                    if not status:<br/>                        status = value.get(&quot;status&quot;, ErrorCode.UNKNOWN_ERROR)<br/>                        message = value.get(&quot;value&quot;) or value.get(&quot;message&quot;)<br/>                        if not isinstance(message, str):<br/>                            value = message<br/>                            message = message.get(&#x27;message&#x27;)<br/>                    else:<br/>                        message = value.get(&#x27;message&#x27;, None)<br/>                except ValueError:<br/>                    pass<br/>    <br/>        exception_class: Type[WebDriverException]<br/>        if status in ErrorCode.NO_SUCH_ELEMENT:<br/>            exception_class = NoSuchElementException<br/>        elif status in ErrorCode.NO_SUCH_FRAME:<br/>            exception_class = NoSuchFrameException<br/>        elif status in ErrorCode.NO_SUCH_SHADOW_ROOT:<br/>            exception_class = NoSuchShadowRootException<br/>        elif status in ErrorCode.NO_SUCH_WINDOW:<br/>            exception_class = NoSuchWindowException<br/>        elif status in ErrorCode.STALE_ELEMENT_REFERENCE:<br/>            exception_class = StaleElementReferenceException<br/>        elif status in ErrorCode.ELEMENT_NOT_VISIBLE:<br/>            exception_class = ElementNotVisibleException<br/>        elif status in ErrorCode.INVALID_ELEMENT_STATE:<br/>            exception_class = InvalidElementStateException<br/>        elif status in ErrorCode.INVALID_SELECTOR \<br/>                or status in ErrorCode.INVALID_XPATH_SELECTOR \<br/>                or status in ErrorCode.INVALID_XPATH_SELECTOR_RETURN_TYPER:<br/>            exception_class = InvalidSelectorException<br/>        elif status in ErrorCode.ELEMENT_IS_NOT_SELECTABLE:<br/>            exception_class = ElementNotSelectableException<br/>        elif status in ErrorCode.ELEMENT_NOT_INTERACTABLE:<br/>            exception_class = ElementNotInteractableException<br/>        elif status in ErrorCode.INVALID_COOKIE_DOMAIN:<br/>            exception_class = InvalidCookieDomainException<br/>        elif status in ErrorCode.UNABLE_TO_SET_COOKIE:<br/>            exception_class = UnableToSetCookieException<br/>        elif status in ErrorCode.TIMEOUT:<br/>            exception_class = TimeoutException<br/>        elif status in ErrorCode.SCRIPT_TIMEOUT:<br/>            exception_class = TimeoutException<br/>        elif status in ErrorCode.UNKNOWN_ERROR:<br/>            exception_class = WebDriverException<br/>        elif status in ErrorCode.UNEXPECTED_ALERT_OPEN:<br/>            exception_class = UnexpectedAlertPresentException<br/>        elif status in ErrorCode.NO_ALERT_OPEN:<br/>            exception_class = NoAlertPresentException<br/>        elif status in ErrorCode.IME_NOT_AVAILABLE:<br/>            exception_class = ImeNotAvailableException<br/>        elif status in ErrorCode.IME_ENGINE_ACTIVATION_FAILED:<br/>            exception_class = ImeActivationFailedException<br/>        elif status in ErrorCode.MOVE_TARGET_OUT_OF_BOUNDS:<br/>            exception_class = MoveTargetOutOfBoundsException<br/>        elif status in ErrorCode.JAVASCRIPT_ERROR:<br/>            exception_class = JavascriptException<br/>        elif status in ErrorCode.SESSION_NOT_CREATED:<br/>            exception_class = SessionNotCreatedException<br/>        elif status in ErrorCode.INVALID_ARGUMENT:<br/>            exception_class = InvalidArgumentException<br/>        elif status in ErrorCode.NO_SUCH_COOKIE:<br/>            exception_class = NoSuchCookieException<br/>        elif status in ErrorCode.UNABLE_TO_CAPTURE_SCREEN:<br/>            exception_class = ScreenshotException<br/>        elif status in ErrorCode.ELEMENT_CLICK_INTERCEPTED:<br/>            exception_class = ElementClickInterceptedException<br/>        elif status in ErrorCode.INSECURE_CERTIFICATE:<br/>            exception_class = InsecureCertificateException<br/>        elif status in ErrorCode.INVALID_COORDINATES:<br/>            exception_class = InvalidCoordinatesException<br/>        elif status in ErrorCode.INVALID_SESSION_ID:<br/>            exception_class = InvalidSessionIdException<br/>        elif status in ErrorCode.UNKNOWN_METHOD:<br/>            exception_class = UnknownMethodException<br/>        else:<br/>            exception_class = WebDriverException<br/>        if not value:<br/>            value = response[&#x27;value&#x27;]<br/>        if isinstance(value, str):<br/>            raise exception_class(value)<br/>        if message == &quot;&quot; and &#x27;message&#x27; in value:<br/>            message = value[&#x27;message&#x27;]<br/>    <br/>        screen = None  # type: ignore[assignment]<br/>        if &#x27;screen&#x27; in value:<br/>            screen = value[&#x27;screen&#x27;]<br/>    <br/>        stacktrace = None<br/>        st_value = value.get(&#x27;stackTrace&#x27;) or value.get(&#x27;stacktrace&#x27;)<br/>        if st_value:<br/>            if isinstance(st_value, str):<br/>                stacktrace = st_value.split(&#x27;\n&#x27;)<br/>            else:<br/>                stacktrace = []<br/>                try:<br/>                    for frame in st_value:<br/>                        line = self._value_or_default(frame, &#x27;lineNumber&#x27;, &#x27;&#x27;)<br/>                        file = self._value_or_default(frame, &#x27;fileName&#x27;, &#x27;&lt;anonymous&gt;&#x27;)<br/>                        if line:<br/>                            file = &quot;%s:%s&quot; % (file, line)<br/>                        meth = self._value_or_default(frame, &#x27;methodName&#x27;, &#x27;&lt;anonymous&gt;&#x27;)<br/>                        if &#x27;className&#x27; in frame:<br/>                            meth = &quot;%s.%s&quot; % (frame[&#x27;className&#x27;], meth)<br/>                        msg = &quot;    at %s (%s)&quot;<br/>                        msg = msg % (meth, file)<br/>                        stacktrace.append(msg)<br/>                except TypeError:<br/>                    pass<br/>        if exception_class == UnexpectedAlertPresentException:<br/>            alert_text = None<br/>            if &#x27;data&#x27; in value:<br/>                alert_text = value[&#x27;data&#x27;].get(&#x27;text&#x27;)<br/>            elif &#x27;alert&#x27; in value:<br/>                alert_text = value[&#x27;alert&#x27;].get(&#x27;text&#x27;)<br/>            raise exception_class(message, screen, stacktrace, alert_text)  # type: ignore[call-arg]  # mypy is not smart enough here<br/>&gt;       raise exception_class(message, screen, stacktrace)<br/><span class="error">E       selenium.common.exceptions.NoSuchElementException: Message: no such element: Unable to locate element: {&quot;method&quot;:&quot;xpath&quot;,&quot;selector&quot;:&quot;//*[@id=&quot;x-auto-101&quot;]/tbody/tr[2]/td[2]/em/button&quot;}</span><br/><span class="error">E         (Session info: chrome=97.0.4692.99)</span><br/><span class="error">E       Stacktrace:</span><br/><span class="error">E       Backtrace:</span><br/><span class="error">E       	Ordinal0 [0x007BFDC3+2555331]</span><br/><span class="error">E       	Ordinal0 [0x007577F1+2127857]</span><br/><span class="error">E       	Ordinal0 [0x00652E08+1060360]</span><br/><span class="error">E       	Ordinal0 [0x0067E49E+1238174]</span><br/><span class="error">E       	Ordinal0 [0x0067E69B+1238683]</span><br/><span class="error">E       	Ordinal0 [0x006A9252+1413714]</span><br/><span class="error">E       	Ordinal0 [0x00697B54+1342292]</span><br/><span class="error">E       	Ordinal0 [0x006A75FA+1406458]</span><br/><span class="error">E       	Ordinal0 [0x00697976+1341814]</span><br/><span class="error">E       	Ordinal0 [0x006736B6+1193654]</span><br/><span class="error">E       	Ordinal0 [0x00674546+1197382]</span><br/><span class="error">E       	GetHandleVerifier [0x00959622+1619522]</span><br/><span class="error">E       	GetHandleVerifier [0x00A0882C+2336844]</span><br/><span class="error">E       	GetHandleVerifier [0x008523E1+541697]</span><br/><span class="error">E       	GetHandleVerifier [0x00851443+537699]</span><br/><span class="error">E       	Ordinal0 [0x0075D18E+2150798]</span><br/><span class="error">E       	Ordinal0 [0x00761518+2168088]</span><br/><span class="error">E       	Ordinal0 [0x00761660+2168416]</span><br/><span class="error">E       	Ordinal0 [0x0076B330+2208560]</span><br/><span class="error">E       	BaseThreadInitThunk [0x75AEFA29+25]</span><br/><span class="error">E       	RtlGetAppContainerNamedObjectPath [0x77997A9E+286]</span><br/><span class="error">E       	RtlGetAppContainerNamedObjectPath [0x77997A6E+238]</span><br/><br/>..\numberprovisioning\venv\lib\site-packages\selenium\webdriver\remote\errorhandler.py:247: NoSuchElementException<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">pytestSessions/test_sp_service_provider_add_tenant.py::test_sp_logo</td>
+          <td class="col-duration">2.66</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> -----------------------------Captured stdout setup------------------------------ <br/>------------setup------------
+<br/> -----------------------------Captured stderr setup------------------------------ <br/>
+
+====== WebDriver manager ======
+Current google-chrome version is 97.0.4692
+Get LATEST chromedriver version for 97.0.4692 google-chrome
+Driver [C:\Users\User QA\.wdm\drivers\chromedriver\win32\97.0.4692.71\chromedriver.exe] found in cache
+<br/> -------------------------------Captured log setup------------------------------- <br/>INFO     WDM:logger.py:26 
+
+INFO     WDM:logger.py:26 ====== WebDriver manager ======
+INFO     WDM:logger.py:26 Current google-chrome version is 97.0.4692
+INFO     WDM:logger.py:26 Get LATEST chromedriver version for 97.0.4692 google-chrome
+INFO     WDM:logger.py:26 Driver [C:\Users\User QA\.wdm\drivers\chromedriver\win32\97.0.4692.71\chromedriver.exe] found in cache<br/> ------------------------------Captured stdout call------------------------------ <br/>Service Provider Login message present: Service Provider Login
+<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">pytestSessions/test_sp_service_provider_add_tenant.py::test_login_into_sysmgmt</td>
+          <td class="col-duration">0.16</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>You are logged in
+<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">pytestSessions/test_sp_service_provider_add_tenant.py::test_open_tenants_page</td>
+          <td class="col-duration">2.08</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>You are on Tenants page before add tenant
+<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">pytestSessions/test_sp_service_provider_add_tenant.py::test_click_add_new_tenant</td>
+          <td class="col-duration">2.05</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">pytestSessions/test_sp_service_provider_add_tenant.py::test_fill_up_form</td>
+          <td class="col-duration">0.29</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">pytestSessions/test_sp_service_provider_add_tenant.py::test_default_language</td>
+          <td class="col-duration">0.20</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>Chinese - China (simplified)
+Dutch - Netherlands
+English - New Zealand
+English - Southern Africa
+English - United States
+<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">pytestSessions/test_sp_service_provider_add_tenant.py::test_default_timezone</td>
+          <td class="col-duration">3.88</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>-11:00 Pacific/Midway
+-11:00 Pacific/Niue
+-11:00 Pacific/Pago_Pago
+-10:00 America/Adak
+-10:00 HST
+-10:00 Pacific/Honolulu
+-10:00 Pacific/Rarotonga
+-10:00 Pacific/Tahiti
+-09:30 Pacific/Marquesas
+-09:00 America/Anchorage
+-09:00 America/Juneau
+-09:00 America/Metlakatla
+-09:00 America/Nome
+-09:00 America/Sitka
+-09:00 America/Yakutat
+-09:00 Pacific/Gambier
+-08:00 America/Los_Angeles
+-08:00 America/Tijuana
+-08:00 America/Vancouver
+-08:00 PST8PDT
+-08:00 Pacific/Pitcairn
+-07:00 America/Boise
+-07:00 America/Cambridge_Bay
+-07:00 America/Chihuahua
+-07:00 America/Creston
+-07:00 America/Dawson
+-07:00 America/Dawson_Creek
+-07:00 America/Denver
+-07:00 America/Edmonton
+-07:00 America/Fort_Nelson
+-07:00 America/Hermosillo
+-07:00 America/Inuvik
+-07:00 America/Mazatlan
+-07:00 America/Ojinaga
+-07:00 America/Phoenix
+-07:00 America/Whitehorse
+-07:00 America/Yellowknife
+-07:00 MST
+-07:00 MST7MDT
+-06:00 America/Bahia_Banderas
+-06:00 America/Belize
+-06:00 America/Chicago
+-06:00 America/Costa_Rica
+-06:00 America/El_Salvador
+-06:00 America/Guatemala
+-06:00 America/Indiana/Knox
+-06:00 America/Indiana/Tell_City
+-06:00 America/Managua
+-06:00 America/Matamoros
+-06:00 America/Menominee
+-06:00 America/Merida
+-06:00 America/Mexico_City
+-06:00 America/Monterrey
+-06:00 America/North_Dakota/Beulah
+-06:00 America/North_Dakota/Center
+-06:00 America/North_Dakota/New_Salem
+-06:00 America/Rainy_River
+-06:00 America/Rankin_Inlet
+-06:00 America/Regina
+-06:00 America/Resolute
+-06:00 America/Swift_Current
+-06:00 America/Tegucigalpa
+-06:00 America/Winnipeg
+-06:00 CST6CDT
+-05:00 Pacific/Easter
+-06:00 Pacific/Galapagos
+-05:00 America/Atikokan
+-05:00 America/Bogota
+-05:00 America/Cancun
+-05:00 America/Cayman
+-05:00 America/Detroit
+-05:00 America/Eirunepe
+-05:00 America/Grand_Turk
+-05:00 America/Guayaquil
+-05:00 America/Havana
+-05:00 America/Indiana/Indianapolis
+-05:00 America/Indiana/Marengo
+-05:00 America/Indiana/Petersburg
+-05:00 America/Indiana/Vevay
+-05:00 America/Indiana/Vincennes
+-05:00 America/Indiana/Winamac
+-05:00 America/Iqaluit
+-05:00 America/Jamaica
+-05:00 America/Kentucky/Louisville
+-05:00 America/Kentucky/Monticello
+-05:00 America/Lima
+-05:00 America/Nassau
+-05:00 America/New_York
+-05:00 America/Nipigon
+-05:00 America/Panama
+-05:00 America/Pangnirtung
+-05:00 America/Port-au-Prince
+-05:00 America/Rio_Branco
+-05:00 America/Thunder_Bay
+-05:00 America/Toronto
+-05:00 EST
+-05:00 EST5EDT
+-04:00 America/Anguilla
+-04:00 America/Antigua
+-04:00 America/Aruba
+-03:00 America/Asuncion
+-04:00 America/Barbados
+-04:00 America/Blanc-Sablon
+-04:00 America/Boa_Vista
+-04:00 America/Campo_Grande
+-04:00 America/Caracas
+-04:00 America/Cuiaba
+-04:00 America/Curacao
+-04:00 America/Dominica
+-04:00 America/Glace_Bay
+-04:00 America/Goose_Bay
+-04:00 America/Grenada
+-04:00 America/Guadeloupe
+-04:00 America/Guyana
+-04:00 America/Halifax
+-04:00 America/Kralendijk
+-04:00 America/La_Paz
+-04:00 America/Lower_Princes
+-04:00 America/Manaus
+-04:00 America/Marigot
+-04:00 America/Martinique
+-04:00 America/Moncton
+-04:00 America/Montserrat
+-04:00 America/Port_of_Spain
+-04:00 America/Porto_Velho
+-04:00 America/Puerto_Rico
+-03:00 America/Santiago
+-04:00 America/Santo_Domingo
+-04:00 America/St_Barthelemy
+-04:00 America/St_Kitts
+-04:00 America/St_Lucia
+-04:00 America/St_Thomas
+-04:00 America/St_Vincent
+-04:00 America/Thule
+-04:00 America/Tortola
+-04:00 Atlantic/Bermuda
+-03:30 America/St_Johns
+-03:00 America/Araguaina
+-03:00 America/Argentina/Buenos_Aires
+-03:00 America/Argentina/Catamarca
+-03:00 America/Argentina/Cordoba
+-03:00 America/Argentina/Jujuy
+-03:00 America/Argentina/La_Rioja
+-03:00 America/Argentina/Mendoza
+-03:00 America/Argentina/Rio_Gallegos
+-03:00 America/Argentina/Salta
+-03:00 America/Argentina/San_Juan
+-03:00 America/Argentina/San_Luis
+-03:00 America/Argentina/Tucuman
+-03:00 America/Argentina/Ushuaia
+-03:00 America/Bahia
+-03:00 America/Belem
+-03:00 America/Cayenne
+-03:00 America/Fortaleza
+-03:00 America/Maceio
+-03:00 America/Miquelon
+-03:00 America/Montevideo
+-03:00 America/Nuuk
+-03:00 America/Paramaribo
+-03:00 America/Recife
+-03:00 America/Santarem
+-03:00 America/Sao_Paulo
+-03:00 Antarctica/Palmer
+-03:00 Antarctica/Rothera
+-03:00 Atlantic/Stanley
+-02:00 America/Noronha
+-02:00 Atlantic/South_Georgia
+-01:00 America/Scoresbysund
+-01:00 Atlantic/Azores
+-01:00 Atlantic/Cape_Verde
++00:00 Africa/Abidjan
++00:00 Africa/Accra
++00:00 Africa/Bamako
++00:00 Africa/Banjul
++00:00 Africa/Bissau
++01:00 Africa/Casablanca
++00:00 Africa/Conakry
++00:00 Africa/Dakar
++01:00 Africa/El_Aaiun
++00:00 Africa/Freetown
++00:00 Africa/Lome
++00:00 Africa/Monrovia
++00:00 Africa/Nouakchott
++00:00 Africa/Ouagadougou
++00:00 Africa/Sao_Tome
++00:00 America/Danmarkshavn
++00:00 Antarctica/Troll
++00:00 Atlantic/Canary
++00:00 Atlantic/Faroe
++00:00 Atlantic/Madeira
++00:00 Atlantic/Reykjavik
++00:00 Atlantic/St_Helena
++00:00 Etc/GMT
++00:00 Etc/UTC
+<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">pytestSessions/test_sp_service_provider_add_tenant.py::test_default_country</td>
+          <td class="col-duration">3.82</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>AC
+Afghanistan
+Albania
+Algeria
+American Samoa
+Andorra
+Angola
+Anguilla
+Antigua &amp; Barbuda
+Argentina
+Armenia
+Aruba
+Australia
+Austria
+Azerbaijan
+Bahamas
+Bahrain
+Bangladesh
+Barbados
+Belarus
+Belgium
+Belize
+Benin
+Bermuda
+Bhutan
+Bolivia
+Bosnia &amp; Herzegovina
+Botswana
+Brazil
+British Indian Ocean Territory
+British Virgin Islands
+Brunei
+Bulgaria
+Burkina Faso
+Burundi
+Cambodia
+Cameroon
+Canada
+Cape Verde
+Caribbean Netherlands
+Cayman Islands
+Central African Republic
+Chad
+Chile
+China
+Christmas Island
+Cocos (Keeling) Islands
+Colombia
+Comoros
+Congo - Brazzaville
+Congo - Kinshasa
+Cook Islands
+Costa Rica
+Croatia
+Cuba
+Curaçao
+Cyprus
+Czechia
+Côte d’Ivoire
+Denmark
+Djibouti
+Dominica
+Dominican Republic
+Ecuador
+Egypt
+El Salvador
+Equatorial Guinea
+Eritrea
+Estonia
+Eswatini
+Ethiopia
+Falkland Islands
+Faroe Islands
+Fiji
+Finland
+France
+French Guiana
+French Polynesia
+Gabon
+Gambia
+Georgia
+Germany
+Ghana
+Gibraltar
+Greece
+Greenland
+Grenada
+Guadeloupe
+Guam
+Guatemala
+Guernsey
+Guinea
+Guinea-Bissau
+Guyana
+Haiti
+Honduras
+Hong Kong SAR China
+Hungary
+Iceland
+India
+Indonesia
+Iran
+Iraq
+Ireland
+Isle of Man
+Israel
+Italy
+Jamaica
+Japan
+Jersey
+Jordan
+Kazakhstan
+Kenya
+Kiribati
+Kuwait
+Kyrgyzstan
+Laos
+Latvia
+Lebanon
+Lesotho
+Liberia
+Libya
+Liechtenstein
+Lithuania
+Luxembourg
+Macao SAR China
+Madagascar
+Malawi
+Malaysia
+Mali
+Malta
+Marshall Islands
+Martinique
+Mauritania
+Mauritius
+Mayotte
+Mexico
+Micronesia
+Moldova
+Monaco
+Mongolia
+Montenegro
+Montserrat
+Morocco
+Mozambique
+MV
+Myanmar (Burma)
+Namibia
+Nauru
+Nepal
+Netherlands
+New Caledonia
+New Zealand
+Nicaragua
+Niger
+Nigeria
+Niue
+Norfolk Island
+North Korea
+North Macedonia
+Northern Mariana Islands
+Norway
+Oman
+Pakistan
+Palau
+Palestinian Territories
+Panama
+Papua New Guinea
+Paraguay
+Peru
+Philippines
+Poland
+Portugal
+Puerto Rico
+Qatar
+Romania
+Russia
+<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">pytestSessions/test_sp_service_provider_add_tenant.py::test_region_menu</td>
+          <td class="col-duration">0.19</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>Default
+<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">pytestSessions/test_sp_service_provider_add_tenant.py::test_continue_form</td>
+          <td class="col-duration">0.44</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">pytestSessions/test_sp_service_provider_add_tenant.py::test_database_server</td>
+          <td class="col-duration">0.19</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>vladis01.bugfocus.com
+<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">pytestSessions/test_sp_service_provider_add_tenant.py::test_complete_form</td>
+          <td class="col-duration">10.28</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">pytestSessions/test_sp_service_provider_add_tenant.py::test_set_status_active</td>
+          <td class="col-duration">0.20</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>Active
+<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">pytestSessions/test_sp_service_provider_add_tenant.py::test_ok_apply</td>
+          <td class="col-duration">9.23</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> ----------------------------Captured stdout teardown---------------------------- <br/>----------tear down----------
+<br/></div></td></tr></tbody></table></body></html>
