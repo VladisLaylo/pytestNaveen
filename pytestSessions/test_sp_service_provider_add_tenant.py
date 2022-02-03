@@ -100,12 +100,6 @@ def test_region_menu(init_driver):  # expand REGION menu to get the list of item
             break
 
 
-"""
-    driver.find_element(By.XPATH, '//*[@id="x-auto-106"]').click()  # Click to expand Region menu
-    driver.find_element(By.ID, 'x-auto-105-input').send_keys("Default")  # Region: select ID=x-auto-106
-"""
-
-
 def test_continue_form(init_driver):
     driver.find_element(By.ID, 'gwt-debug-newLoginId-input').send_keys("t1-admin")  # Username
     driver.find_element(By.ID, 'gwt-debug-newPassword-input').send_keys("password")  # Password
@@ -125,49 +119,31 @@ def test_database_server(init_driver):  # expand DATABASE SERVER menu to get the
             break
 
 
-"""    
-    driver.find_element(By.XPATH, '//*[@id="gwt-debug-newDatabaseServer-input"]').click()  # Click to expand Database
-    time.sleep(2)
-    # pyautogui.click(700, 835)  # server menu on MacOS
-    pyautogui.click(1130, 890)  # server menu on Windows 10
-"""
-
-
 def test_complete_form(init_driver):
     driver.find_element(By.ID, 'gwt-debug-newDbName-input').send_keys("_db")  # Database name
     driver.find_element(By.ID, 'gwt-debug-newDbUser-input').send_keys("_db_usr")  # Username
     driver.find_element(By.ID, 'gwt-debug-newDbPassword-input').send_keys("password")  # Password
     driver.find_element(By.XPATH, "//button[text()='OK']").click()  # Click on OK button
-
+    time.sleep(10)
 
 # DOES NOT WORK
 
 
 def test_set_status_active(init_driver):
     driver.find_element(By.XPATH, '//*[@id="x-auto-82"]').click()
-    time.sleep(2)
-    drop_menu = driver.find_element(By.CSS_SELECTOR, 'div.x-combo-list-item')  # collect list of menu items then print
+    drop_menu = driver.find_elements(By.CSS_SELECTOR, 'div.x-combo-list-item')  # collect list of menu items then print
     for ele in drop_menu:
         print(ele.text)
         if ele.text == 'Active':  # find item to click
             ele.click()
             break
-
-
-"""
-    time.sleep(10)
-    driver.find_element(By.XPATH, '//*[@id="x-auto-82"]').click()  # find Status menu expander
-    # pyautogui.click(940, 510)  # expand Status menu on MacOS
-    pyautogui.click(1100, 458)  # expand Status menu on Windows 10
-
     driver.find_element(By.XPATH, '//*[@id="gwt-debug-entity-update"]/tbody/tr[2]/td[2]/em/button').click()  # apply
-"""
 
 
 def test_apply_pass_db(init_driver):
     time.sleep(2)
     driver.find_element(By.XPATH, '//*[@id="gwt-debug-dbPassword-input"]').send_keys("password")  # send password
-    driver.find_element(By.XPATH, '//*[@id="x-auto-133"]/tbody/tr[2]/td[2]/em/button').click()  # click Apply on DB
+    driver.find_element(By.XPATH, '//*[@id="x-auto-101"]/tbody/tr[2]/td[2]/em/button').click()  # click Apply to DB
 
 
 def test_ok_apply(init_driver):
@@ -181,4 +157,21 @@ def test_ok_apply(init_driver):
 """
 pytest pytestSessions/test_sp_service_provider_add_tenant.py -v --capture=tee-sys --html=reports/test_sp_sp_add_tenant.html
 
+"""
+
+"""    
+    driver.find_element(By.XPATH, '//*[@id="gwt-debug-newDatabaseServer-input"]').click()  # Click to expand Database
+    time.sleep(2)
+    # pyautogui.click(700, 835)  # server menu on MacOS
+    pyautogui.click(1130, 890)  # server menu on Windows 10
+
+    driver.find_element(By.XPATH, '//*[@id="x-auto-106"]').click()  # Click to expand Region menu
+    driver.find_element(By.ID, 'x-auto-105-input').send_keys("Default")  # Region: select ID=x-auto-106
+
+    time.sleep(10)
+    driver.find_element(By.XPATH, '//*[@id="x-auto-82"]').click()  # find Status menu expander
+    # pyautogui.click(940, 510)  # expand Status menu on MacOS
+    pyautogui.click(1100, 458)  # expand Status menu on Windows 10
+
+    driver.find_element(By.XPATH, '//*[@id="gwt-debug-entity-update"]/tbody/tr[2]/td[2]/em/button').click()  # apply
 """
