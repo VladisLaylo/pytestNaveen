@@ -4,7 +4,6 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
 import pytest
-import pyautogui
 import time
 
 driver = None
@@ -142,8 +141,11 @@ def test_set_status_active(init_driver):
 
 def test_apply_pass_db(init_driver):
     time.sleep(2)
-    driver.find_element(By.XPATH, '//*[@id="gwt-debug-dbPassword-input"]').send_keys("password")  # send password
-    driver.find_element(By.XPATH, '//*[@id="x-auto-101"]/tbody/tr[2]/td[2]/em/button').click()  # click Apply to DB
+    driver.find_element(By.ID, 'gwt-debug-dbPassword-input').send_keys("password")  # send password
+    driver.find_element(By.XPATH, '/html/body/div[1]/div/div[4]/div[2]/div[2]/div[1]/div/div/div/div[2]/div/div['
+                                  '2]/div[2]/div[1]/div/div/div/div[2]/div[2]/div[1]/form/div[4]/div['
+                                  '1]/div/table/tbody/tr/td[2]/table/tbody/tr[2]/td[2]/em/button').click()  # click
+    # Apply to DB
 
 
 def test_ok_apply(init_driver):
@@ -155,6 +157,8 @@ def test_ok_apply(init_driver):
 
 
 """
+pytest pytestSessions/test_sp_service_provider_add_tenant.py
+
 pytest pytestSessions/test_sp_service_provider_add_tenant.py -v --capture=tee-sys --html=reports/test_sp_sp_add_tenant.html
 
 """
