@@ -98,6 +98,6 @@ def test_ok_apply(init_driver):
 
 
 """
-pytest pytestSessions/test_sp_service_provider_add_tenant.py -v --capture=tee-sys --html=test_sp_service_provider_add_tenant.py.html
+pytest pytestSessions/test_sp_service_provider_add_tenant.py -v --capture=tee-sys --html=test_sp_service_provider_add_tenant.html
 
 """
