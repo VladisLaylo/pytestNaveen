@@ -50,7 +50,8 @@ def test_click_add_new_tenant(init_driver):
 
 def test_fill_up_form(init_driver):
     driver.find_element(By.ID, 'gwt-debug-newName-input').send_keys("Tenant1")  # Name
-    driver.find_element(By.XPATH, "//input[@id='gwt-debug-newUrl-input']").send_keys("t1.ru")  # Access domain
+
+    driver.find_element(By.XPATH, "//input[@id='gwt-debug-newUrl-input']").send_keys("t1.bugfocus.com")  # Access domain
     # domain
     driver.find_element(By.ID, 'gwt-debug-newSip-input').send_keys("sip1.ru")  # SIP domain
 
@@ -119,8 +120,10 @@ def test_database_server(init_driver):  # expand DATABASE SERVER menu to get the
 
 
 def test_complete_form(init_driver):
-    driver.find_element(By.ID, 'gwt-debug-newDbName-input').send_keys("_db")  # Database name
-    driver.find_element(By.ID, 'gwt-debug-newDbUser-input').send_keys("_db_usr")  # Username
+    driver.find_element(By.ID, 'gwt-debug-newDbName-input').clear()  # Clear Database name
+    driver.find_element(By.ID, 'gwt-debug-newDbName-input').send_keys("t1_db")  # Database name
+    driver.find_element(By.ID, 'gwt-debug-newDbUser-input').clear()  # Clear Username
+    driver.find_element(By.ID, 'gwt-debug-newDbUser-input').send_keys("t1_db_usr")  # Username
     driver.find_element(By.ID, 'gwt-debug-newDbPassword-input').send_keys("password")  # Password
     driver.find_element(By.XPATH, "//button[text()='OK']").click()  # Click on OK button
     time.sleep(10)
