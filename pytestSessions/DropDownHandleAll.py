@@ -14,8 +14,11 @@ def select_values(options_list, value):
                     ele.click()
                     break
     else:
-        for ele in options_list:
-            ele.click()
+        try:
+            for ele in options_list:
+                ele.click()
+        except Exception as e:
+            print(e)
 
 
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
@@ -27,5 +30,10 @@ driver.find_element(By.ID, 'justAnInputBox').click()
 time.sleep(2)
 
 drop_list = driver.find_elements(By.CSS_SELECTOR, 'span.comboTreeItemTitle')  # accept cookies
-values_list = ['all']
+#  values_list = ['choice 1', 'choice 3', 'choice 6 2 1']  # select for multiple
+# values_list = ['choice 1']  # select for single
+values_list = ['all']  # select all
 select_values(drop_list, values_list)
+
+time.sleep(5)
+driver.quit()
