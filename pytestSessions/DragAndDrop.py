@@ -5,7 +5,6 @@ from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
 import time
 
-
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
 driver.implicitly_wait(10)
 driver.get("https://jqueryui.com/resources/demos/droppable/default.html")
@@ -21,5 +20,10 @@ time.sleep(5)
 driver.quit()
 
 '''
+Part of the lesson:
 https://youtu.be/pFLmQ4Vo9Co
+RightClickMouse.py
+ElementActionsConcept.py
+MoveToElementConcept.py
+DragAndDrop.py
 '''

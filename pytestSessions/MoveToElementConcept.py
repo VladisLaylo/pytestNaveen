@@ -1,8 +1,8 @@
 import time
+
 from selenium import webdriver
 from selenium.webdriver import ActionChains
 from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.common import action_chains
 from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
 
@@ -25,5 +25,10 @@ time.sleep(5)
 driver.quit()
 
 '''
+Part of the lesson:
 https://youtu.be/pFLmQ4Vo9Co
+RightClickMouse.py
+ElementActionsConcept.py
+MoveToElementConcept.py
+DragAndDrop.py
 '''
