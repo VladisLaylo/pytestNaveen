@@ -12,7 +12,7 @@ driver.get("https://spicejet.com")
 
 '''move to element'''
 add_ons_ele = driver.find_element(By.XPATH, '//*[@id="main-container"]/div/div[1]/div[2]/div[1]/div/div[2]/div['
-                                        '1]/div/div[1]/div[1]')
+                                            '1]/div/div[1]/div[1]')
 act_chains = ActionChains(driver)
 act_chains.move_to_element(add_ons_ele).perform()
 

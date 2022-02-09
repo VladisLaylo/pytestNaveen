@@ -128,8 +128,6 @@ def test_complete_form(init_driver):
     driver.find_element(By.XPATH, "//button[text()='OK']").click()  # Click on OK button
     time.sleep(10)
 
-# DOES NOT WORK
-
 
 def test_set_status_active(init_driver):
     driver.find_element(By.XPATH, '//*[@id="x-auto-82"]').click()

@@ -3,7 +3,11 @@ pip install --upgrade pip
 pip install --upgrade --user pip  # in case of error
 
 pip list --outdated
-
+==============================
+pip install pip-review              # app to upgrade all local packages
+pip-review                          # check local packages
+pip-review --local --interactive    # upgrade packages
+==============================
 pip install selenium
 
 pip install webdriver-manager
