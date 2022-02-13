@@ -13,7 +13,7 @@ def init_driver():
     global driver
     # print("------------setup------------")
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
-    #driver.implicitly_wait(10)
+    driver.implicitly_wait(10)
     driver.delete_all_cookies()
     driver.get('https://vladis03.bugfocus.com/numberprovisioning/provider')
 
