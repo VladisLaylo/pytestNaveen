@@ -7,15 +7,16 @@ from webdriver_manager.firefox import GeckoDriverManager
 import time
 
 
-options = webdriver.ChromeOptions()
+"""options = webdriver.ChromeOptions()
 options.headless = True
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
-driver.implicitly_wait(10)
-
-"""options = webdriver.FirefoxOptions()
-options.headless = True
-driver = webdriver.Firefox(service=Service(GeckoDriverManager().install()), options=options)
 driver.implicitly_wait(10)"""
+
+options = webdriver.FirefoxOptions()
+# options.headless = True  # This is one options
+options.add_argument('--headless')  # This is second option
+driver = webdriver.Firefox(service=Service(GeckoDriverManager().install()), options=options)
+driver.implicitly_wait(10)
 
 driver.get("http://amazon.in")
 print(driver.title)
